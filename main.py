@@ -122,9 +122,9 @@ class Game:
         if (TEMP < 32):
             bg = pygame.image.load("assets/images/big_cold.jpg")
         elif (TEMP < 80):
-            bg = pygame.image.load("assets/images/big_warm.png")
+            bg = pygame.image.load("assets/images/big_warm.jpg")
         elif (TEMP > 80):
-            bg = pygame.image.load("assets/images/big_hot.png")
+            bg = pygame.image.load("assets/images/big_hot.jpg")
         self.surface.blit(bg, (0, 0))
         self.surface.blit(bg, (0,200))
         self.surface.blit(bg, (0,400))
