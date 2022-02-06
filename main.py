@@ -12,6 +12,7 @@ zipcode = int(input("What is your zipcode: "))
 SIZE = 40
 BACKGROUND_COLOR = (110, 110, 5)
 TEMP = check_conditions(zipcode)
+window = pygame.display.set_mode((1000, 1000))
 
 class Apple:
     def __init__(self, board):
@@ -119,12 +120,21 @@ class Game:
 
     def render_background(self):
         if (TEMP < 32):
-            bg = pygame.image.load("assets/images/cold.jpg")
+            bg = pygame.image.load("assets/images/big_cold.jpg")
         elif (TEMP < 80):
-            bg = pygame.image.load("assets/images/warm.png")
+            bg = pygame.image.load("assets/images/big_warm.png")
         elif (TEMP > 80):
-            bg = pygame.image.load("assets/images/hot.png")
+            bg = pygame.image.load("assets/images/big_hot.png")
         self.surface.blit(bg, (0, 0))
+        self.surface.blit(bg, (0,200))
+        self.surface.blit(bg, (0,400))
+        self.surface.blit(bg, (0,800))
+        self.surface.blit(bg, (0,1000))
+        self.surface.blit(bg, (1000,0))
+        self.surface.blit(bg, (800,0))
+        self.surface.blit(bg, (600,0))
+        self.surface.blit(bg, (400,0))
+        self.surface.blit(bg, (200,0))
 
     def play(self):
         self.render_background()
