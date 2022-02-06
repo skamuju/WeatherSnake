@@ -85,7 +85,7 @@ class Snake:
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption("Codebasics Snake And Apple Game")
+        pygame.display.set_caption("Snake And Apple Game")
 
         pygame.mixer.init()
         self.play_background_music()
@@ -121,9 +121,9 @@ class Game:
     def render_background(self):
         if (TEMP < 32):
             bg = pygame.image.load("assets/images/big_cold.jpg")
-        elif (TEMP < 80):
+        elif (TEMP < 70):
             bg = pygame.image.load("assets/images/big_warm.jpg")
-        elif (TEMP > 80):
+        elif (TEMP > 70):
             bg = pygame.image.load("assets/images/big_hot.jpg")
         self.surface.blit(bg, (0, 0))
         self.surface.blit(bg, (0,200))
