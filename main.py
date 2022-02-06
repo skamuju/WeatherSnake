@@ -171,10 +171,10 @@ class Game:
         self.render_background()
         font = pygame.font.SysFont('arial', 30)
         line1 = font.render(
-            f"Game is over! Your score is {self.snake.length}", True, (255, 255, 255))
-        self.surface.blit(line1, (200, 300))
+            f"Game is over! Your score is {self.snake.length}. The temperature is {TEMP}", True, (0, 0, 0))
+        self.surface.blit(line1, (125, 300))
         line2 = font.render(
-            "To play again press Enter. To exit press Escape!", True, (255, 255, 255))
+            "To play again press Enter. To exit press Escape!", True, (0, 0, 0))
         self.surface.blit(line2, (200, 350))
         pygame.mixer.music.pause()
         pygame.display.flip()
