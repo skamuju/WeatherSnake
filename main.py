@@ -7,23 +7,21 @@ from pygame.locals import *
 import pygame
 from weather import *
 
-zipcode = input("What is your zipcode: ")
+zipcode = int(input("What is your zipcode: "))
 
 SIZE = 40
 BACKGROUND_COLOR = (110, 110, 5)
-
 TEMP = check_conditions(zipcode)
 
-
 class Apple:
-    def __init__(self, parent_screen):
-        self.parent_screen = parent_screen
-        self.image = pygame.image.load("add-ons/apple.jpg").convert()
+    def __init__(self, board):
+        self.board = board
+        self.image = pygame.image.load("assets/images/apple.jpg").convert()
         self.x = 120
         self.y = 120
 
     def draw(self):
-        self.parent_screen.blit(self.image, (self.x, self.y))
+        self.board.blit(self.image, (self.x, self.y))
         pygame.display.flip()
 
     def move(self):
@@ -32,9 +30,9 @@ class Apple:
 
 
 class Snake:
-    def __init__(self, parent_screen):
-        self.parent_screen = parent_screen
-        self.image = pygame.image.load("add-ons/block.jpg").convert()
+    def __init__(self, board):
+        self.board = board
+        self.image = pygame.image.load("assets/images/block.jpg").convert()
         self.direction = 'down'
 
         self.length = 1
@@ -73,7 +71,7 @@ class Snake:
 
     def draw(self):
         for i in range(self.length):
-            self.parent_screen.blit(self.image, (self.x[i], self.y[i]))
+            self.board.blit(self.image, (self.x[i], self.y[i]))
 
         pygame.display.flip()
 
@@ -86,8 +84,7 @@ class Snake:
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption(
-            "GunnHacks 8.0 - Snake (Rohan Vanga, Saketh Kamuju, Krish Piryani, Suchir Madap)")
+        pygame.display.set_caption("Codebasics Snake And Apple Game")
 
         pygame.mixer.init()
         self.play_background_music()
@@ -99,14 +96,14 @@ class Game:
         self.apple.draw()
 
     def play_background_music(self):
-        pygame.mixer.music.load('add-ons/bg_music_1.mp3')
+        pygame.mixer.music.load('assets/sounds/snake_background.mp3')
         pygame.mixer.music.play(-1, 0)
 
     def play_sound(self, sound_name):
         if sound_name == "crash":
-            sound = pygame.mixer.Sound("add-ons/crash.mp3")
+            sound = pygame.mixer.Sound("assets/sounds/snake_crash.mp3")
         elif sound_name == 'ding':
-            sound = pygame.mixer.Sound("add-ons/ding.mp3")
+            sound = pygame.mixer.Sound("assets/sounds/snake_eat.mp3")
 
         pygame.mixer.Sound.play(sound)
 
@@ -120,23 +117,39 @@ class Game:
                 return True
         return False
 
+    def render_background(self):
+        if (TEMP < 32):
+            bg = pygame.image.load("assets/images/cold.jpg")
+        elif (TEMP < 80):
+            bg = pygame.image.load("assets/images/warm.png")
+        elif (TEMP > 80):
+            bg = pygame.image.load("assets/images/hot.png")
+        self.surface.blit(bg, (0, 0))
+
     def play(self):
+        self.render_background()
         self.snake.walk()
         self.apple.draw()
         self.display_score()
         pygame.display.flip()
 
         # snake eating apple scenario
-        if self.is_collision(self.snake.x[0], self.snake.y[0], self.apple.x, self.apple.y):
-            self.play_sound("ding")
-            self.snake.increase_length()
-            self.apple.move()
+        for i in range(self.snake.length):
+            if self.is_collision(self.snake.x[i], self.snake.y[i], self.apple.x, self.apple.y):
+                self.play_sound("ding")
+                self.snake.increase_length()
+                self.apple.move()
 
         # snake colliding with itself
         for i in range(3, self.snake.length):
             if self.is_collision(self.snake.x[0], self.snake.y[0], self.snake.x[i], self.snake.y[i]):
                 self.play_sound('crash')
                 raise "Collision Occurred"
+
+        # snake colliding with the boundaries of the window
+        if not (0 <= self.snake.x[0] <= 1000 and 0 <= self.snake.y[0] <= 800):
+            self.play_sound('crash')
+            raise "Hit the boundary error"
 
     def display_score(self):
         font = pygame.font.SysFont('arial', 30)
@@ -195,7 +208,8 @@ class Game:
                 pause = True
                 self.reset()
 
-            time.sleep(.25)
+            time.sleep(.1)
+
 
 
 game = Game()
